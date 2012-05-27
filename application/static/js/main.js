@@ -28,12 +28,10 @@ var stpc = {
 }
 
 function slideTowardsPost(){
-	
 	delta = stpc.destinationX - stpc.el.scrollLeft();
 	delta *= stpc.frictionMultiplier;
 	old = stpc.el.scrollLeft();
 	stpc.el.scrollLeft(old + delta);
-	console.log(delta);
 	if(Math.abs(delta) < 3 || old == stpc.el.scrollLeft()){
 		stpc.isSliding = false;
 		stpc.el.scrollLeft(stpc.destinationX)
@@ -47,10 +45,27 @@ function slideTowardsPost(){
 function gotoPost(id){
 	stpc.isSliding = true;
 	stpc.destinationX = postPositions[id];
-	console.log(stpc.destinationX);
 	setTimeout(slideTowardsPost, stpc.timeout);
 	$('.pagination li.active').removeClass('active'); 
 	$('.pagination li a[href="#post'+id+'"]').parent().addClass('active');
+	return false;
+}
+
+function gotoPrevPost(){
+	id = 0;
+	while(postPositions[id] < stpc.el.scrollLeft()){
+		id++;
+	}
+	gotoPost(id == 0 ? 0:id-1);
+	return false;
+}
+
+function gotoNextPost(){
+	id = 0;
+	while(postPositions[id] < stpc.el.scrollLeft()){
+		id++;
+	}
+	gotoPost(id == postPositions.size-1 ? postPositions.size-1:id+1);
 	return false;
 }
 
@@ -62,7 +77,6 @@ function initPostPositions(){
 	for(i=0; i<els.size();i++){
 		centerDelta = (postContainerWidth-$(els[i]).width()-MARGIN_AND_BORDERS)/2;
 		postPositions.push(w-centerDelta);
-		console.log(postPositions + ' / ' + $(els[i]).width());
 		w += $(els[i]).width()+MARGIN_AND_BORDERS;
 	}
 	$('.posts').width(w);
@@ -100,6 +114,7 @@ $(window).load(function() {
 	calculatePositions();
 	// remove the loader 
 	$('#loader').remove();
-	// scrolls to the 1st post
+	// scrolls to the 1st pos
+	stpc.el.scrollLeft(500);
 	gotoPost(0);
 });

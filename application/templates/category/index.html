@@ -42,11 +42,11 @@
 </div>
 <div class="pagination">
 	<ul>
-		<li><a href="#">Prev</a></li>
+		<li><a href="#" onclick="return gotoPrevPost();">Prev</a></li>
 			{% for i in range(0, 10) %}
 		<li><a href="#post{{i}}" onclick="return gotoPost({{ i }});">{{ i }}</a></li>
 			{% endfor %}		
-    	<li><a href="#">Next</a></li>
+    	<li><a href="#" onclick="return gotoNextPost();">Next</a></li>
 	</ul>
 </div>
 {% endblock %}

@@ -6,6 +6,8 @@
 	
 <!-- 	Custom -->
 	<script src="/static/js/main.js"></script>
+	<!-- Dependent on main (not modular, but hardcoded) -->
+	<script src="/static/js/dragger.js"></script>
 	
 	{% if admin %}
 	<!-- TODO WYSIWYG editor -->
@@ -38,13 +40,13 @@
 		{% endfor %}
 	</div>
 </div>
-<div class="pagination" style="position: fixed; bottom: 0;'">
+<div class="pagination">
 	<ul>
 		<li><a href="#">Prev</a></li>
 			{% for i in range(0, 10) %}
 		<li><a href="#post{{i}}" onclick="return gotoPost({{ i }});">{{ i }}</a></li>
 			{% endfor %}		
-    	<li><a href="$(this).id">Next</a></li>
+    	<li><a href="#">Next</a></li>
 	</ul>
 </div>
 {% endblock %}

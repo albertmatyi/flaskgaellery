@@ -5,7 +5,6 @@
 
 .container-fluid, #body_content, #navigation{
 	height: 570px;
-	overflow: hidden;
 }
 
 .nav ul.nav{
@@ -13,7 +12,7 @@
 }
 
 .post-container{
-	overflow-x: scroll;
+	overflow-x: hidden;
 	overflow-y: hidden;
 /*  + 40px for well padding & +20px for scrollbar*/
 	height: 575px;
@@ -42,7 +41,9 @@
 }
 
 .pagination {
-	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
+	float: left;
+	position: relative;
+	top: 5000px;
 }

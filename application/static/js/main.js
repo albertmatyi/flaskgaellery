@@ -28,12 +28,14 @@ var stpc = {
 }
 
 function slideTowardsPost(){
-//	console.log(stpc.el.scrollLeft());
+	
 	delta = stpc.destinationX - stpc.el.scrollLeft();
 	delta *= stpc.frictionMultiplier;
-	stpc.el.scrollLeft(stpc.el.scrollLeft() + delta);
-	if(Math.abs(delta) < 3){
-		stpc.isSliding = 0;
+	old = stpc.el.scrollLeft();
+	stpc.el.scrollLeft(old + delta);
+	console.log(delta);
+	if(Math.abs(delta) < 3 || old == stpc.el.scrollLeft()){
+		stpc.isSliding = false;
 		stpc.el.scrollLeft(stpc.destinationX)
 	}
 	if(stpc.isSliding){
@@ -70,6 +72,7 @@ function initPostPositions(){
 
 function calculatePositions(){
 	//calculate the posts padding
+	// TODO figure out wtf is wrong here, and maybe fix it - not urgent
 //	postsPadding = $('.span10').width()/4;
 	//adds a padding so we can center the first & last elements too
 //	$('.posts').css('padding-left', postsPadding);
@@ -99,5 +102,4 @@ $(window).load(function() {
 	$('#loader').remove();
 	// scrolls to the 1st post
 	gotoPost(0);
-
 });

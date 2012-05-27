@@ -1,0 +1,14 @@
+<ul class="nav nav-pills nav-stacked">
+	{% for category in categories recursive %}
+		<li> 
+			<a href="{{ url_for('category', category_id=category.key().id()) }}" >
+				{{ category.title }}
+			</a>
+			{% if category.subcategories %}
+		        <ul class="nav nav-pills nav-stacked">
+		        	{{ loop(category.subcategories) }}
+	        	</ul>
+			{% endif %}
+		</li>	
+	{% endfor %}
+</ul><!-- /navbar -->

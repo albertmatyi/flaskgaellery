@@ -1,0 +1,73 @@
+<div class="modal fade" id="new-image-modal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Add a New Image</h3>
+    </div>
+    <div class="modal-body">
+        <form id="new-image-form" class="well form-horizontal"
+            action="{{ upload_url }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+            <fieldset>
+                {{ form.hidden_tag() }}
+                <div class="control-group">
+                    <div class="control-label">{{ form.title.label }}</div>
+                    <div class="controls">
+                        {{ form.title|safe }}
+                        {% if form.title.errors %}
+                        <ul class="errors">
+                            {% for error in form.title.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.image.label }}</div>
+                    <div class="controls">
+                        {{ form.image|safe }}
+                        {% if form.image.errors %}
+                        <ul class="errors">
+                            {% for error in form.image.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.description.label }}</div>
+                    <div class="controls">
+                        {{ form.description|safe }}
+                        {% if form.description.errors %}
+                        <ul class="errors">
+                            {% for error in form.description.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.category_id.label }}</div>
+                    <div class="controls">
+                        {{ form.category_id|safe }}
+                        {% if form.category_id.errors %}
+                        <ul class="errors">
+                            {% for error in form.category_id.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input class="btn btn-primary" type="submit" value="Add Image"/>
+                        <button class="btn" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+

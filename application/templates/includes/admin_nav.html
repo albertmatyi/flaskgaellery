@@ -1,0 +1,25 @@
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">Flask on App Engine</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li>
+                        <a href="{{ url_for('admin_examples') }}">Examples</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_categories') }}">Categories</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_images') }}">Images</a>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!-- /.navbar .container -->
+    </div><!-- /.navbar-inner -->
+</div><!-- /navbar -->

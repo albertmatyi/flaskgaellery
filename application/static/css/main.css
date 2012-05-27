@@ -1,0 +1,40 @@
+
+/* Main stylesheet */
+
+/* Your customizations here */
+
+.container-fluid, #body_content, #navigation{
+	height: 570px;
+	overflow: hidden;
+}
+
+.nav ul.nav{
+	padding-left: 1em;
+}
+
+.post-container{
+	overflow-x: scroll;
+/* 	overflow-y: hidden; */
+/*  + 40px for well padding & +20px for scrollbar*/
+	height: 575px;
+}
+
+.posts{
+	width: 7400px;
+	height: 100%;
+	padding: 0 20%;
+}
+
+.post.well {
+	float: left;
+	height: 515px;
+	max-width: 740px;
+	margin-left: 2em;
+	margin-bottom: 0;
+}
+
+.pagination {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}

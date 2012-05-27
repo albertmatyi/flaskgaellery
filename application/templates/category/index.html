@@ -32,6 +32,9 @@
 <!-- <div class="horWrapper"> -->
 <!-- <div class="container"> -->
 <!-- <div class="content"> -->
+	<div class="progress progress-striped active" id="loader">
+    	<div class="bar" style="width: 100%;"></div>
+    </div>
 	<div class="posts">
 		{% for i in range(0, 10) %} 
 			{% set randw = random_int(400, 740) %}
@@ -43,7 +46,6 @@
 				<h2 class="fixie"></h2>
 				<article class="fixie"></article >
 			{% endif %}
-				{{i}}
 				<div class="clearfix"></div>
 			</div>
 		{% endfor %}

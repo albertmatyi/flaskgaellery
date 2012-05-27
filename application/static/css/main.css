@@ -14,22 +14,30 @@
 
 .post-container{
 	overflow-x: scroll;
-/* 	overflow-y: hidden; */
+	overflow-y: hidden;
 /*  + 40px for well padding & +20px for scrollbar*/
 	height: 575px;
 }
 
+#loader {
+	width: 300px;
+	margin: 0 auto;
+	margin-top:230px;
+}
+
 .posts{
-	width: 7400px;
 	height: 100%;
-	padding: 0 20%;
+	padding: 0;
+	overflow: hidden;
+	position: relative;
+	top: 575px;
 }
 
 .post.well {
 	float: left;
 	height: 515px;
 	max-width: 740px;
-	margin-left: 2em;
+	margin-left: 10px;
 	margin-bottom: 0;
 }
 

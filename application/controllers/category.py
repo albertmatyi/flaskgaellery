@@ -11,7 +11,7 @@ from flask import render_template, flash, url_for, redirect
 from  application.decorators import login_required, admin_required
 from application.forms import CategoryForm
 from application.models import CategoryModel, ImageModel
-from application import app
+from application import app, models
 from flask.globals import request
 from flask.helpers import jsonify
 from repr import repr
@@ -53,7 +53,12 @@ def delete_category(category_id):
     except CapabilityDisabledError:
         flash(u'App Engine Datastore is currently in read-only mode.', 'info')
         return redirect(url_for('admin_categories'))
-
+@admin_required
+@app.route('/admin/initdb')
+def initDB():
+    models.initDB()
+    return redirect(url_for('home'))
+    pass
 
 def init_sub_tree_along_path(category, path):
     '''

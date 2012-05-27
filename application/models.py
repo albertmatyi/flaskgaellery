@@ -8,7 +8,6 @@ App Engine datastore models
 
 from google.appengine.ext import db
 import datetime
-from random import random
 
 class AbstractModel(db.Model):
     def jsond(self):
@@ -74,3 +73,19 @@ class ImageModel(AbstractModel):
     image_thumb_blob_key = db.StringProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     index = db.IntegerProperty(required=False)
+    
+def initDB():
+    CategoryModel(title='Home', parent_id=-1).put()
+    key = CategoryModel(title='Portraits', parent_id=-1).put()
+    CategoryModel(title='Men', parent_id=key.id()).put()
+    CategoryModel(title='Women', parent_id=key.id()).put()
+    key = CategoryModel(title='Cities', parent_id=-1).put()
+    CategoryModel(title='London', parent_id=key.id()).put()
+    CategoryModel(title='Antwerp', parent_id=key.id()).put()
+    key = CategoryModel(title='Cities', parent_id=-1).put()
+    CategoryModel(title='London', parent_id=key.id()).put()
+    CategoryModel(title='Antwerp', parent_id=key.id()).put()
+    CategoryModel(title='About', parent_id=-1).put()
+    CategoryModel(title='Contact', parent_id=-1).put()
+    pass
+    

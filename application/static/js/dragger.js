@@ -19,7 +19,7 @@ var draggerConfig = {
 	/**
 	 * How fast we decrease the momentum (friction)
 	 */
-	momentumChange: 1,
+	momentumChange: .9,
 	/**
 	 * Marks a state where we've released the mouse, and we let the scrolled element slide 
 	 */
@@ -27,7 +27,7 @@ var draggerConfig = {
 	/**
 	 * The timeout value of the movement (in ms)
 	 */
-	timeoutL:30, 
+	timeoutL: 30, 
 }
 
 $(window).load(function() {
@@ -53,7 +53,7 @@ function stoppedDragHandler(event){
 function slideAfterDrag(){
 	
 	draggerConfig.el.scrollLeft(draggerConfig.el.scrollLeft() + draggerConfig.momentum);
-	draggerConfig.momentum += (draggerConfig.momentum > 0 ? -1:1) *  draggerConfig.momentumChange;
+	draggerConfig.momentum *= draggerConfig.momentumChange;
 	if(Math.abs(draggerConfig.momentum) <= 3){
 		draggerConfig.momentum = 0;
 		draggerConfig.isSliding = false;
@@ -75,6 +75,7 @@ function startedDragHandler(event){
 	//stop the event
 	event.stopImmediatePropagation();
 	draggerConfig.isSliding = false;
+	draggerConfig.momentum = 0;
 	draggerConfig.isDragging = true;
 	draggerConfig.prevX = event.pageX;
 }

@@ -32,7 +32,7 @@ function slideTowardsPost(){
 	delta *= stpc.frictionMultiplier;
 	old = stpc.el.scrollLeft();
 	stpc.el.scrollLeft(old + delta);
-	if(Math.abs(delta) < 3 || old == stpc.el.scrollLeft()){
+	if(Math.abs(delta) < 1 || old == stpc.el.scrollLeft()){
 		stpc.isSliding = false;
 		stpc.el.scrollLeft(stpc.destinationX)
 	}

@@ -22,12 +22,12 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <div class="control-label">{{ form.description.label }}</div>
+                    <div class="control-label">{{ form.parent_id.label }}</div>
                     <div class="controls">
-                        {{ form.description|safe }}
-                        {% if form.description.errors %}
+                        {{ form.parent_id|safe }}
+                        {% if form.parent_id.errors %}
                         <ul class="errors">
-                            {% for error in form.description.errors %}
+                            {% for error in form.parent_id.errors %}
                             <li>{{ error }}</li>
                             {% endfor %}
                         </ul>
@@ -35,12 +35,38 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <div class="control-label">{{ form.parent_id.label }}</div>
+                    <div class="control-label">{{ form.order.label }}</div>
                     <div class="controls">
-                        {{ form.parent_id|safe }}
-                        {% if form.parent_id.errors %}
+                        {{ form.order|safe }}
+                        {% if form.order.errors %}
                         <ul class="errors">
-                            {% for error in form.parent_id.errors %}
+                            {% for error in form.order.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.autoscroll.label }}</div>
+                    <div class="controls">
+                        {{ form.autoscroll|safe }}
+                        {% if form.autoscroll.errors %}
+                        <ul class="errors">
+                            {% for error in form.autoscroll.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.visible.label }}</div>
+                    <div class="controls">
+                        {{ form.visible|safe }}
+                        {% if form.visible.errors %}
+                        <ul class="errors">
+                            {% for error in form.visible.errors %}
                             <li>{{ error }}</li>
                             {% endfor %}
                         </ul>

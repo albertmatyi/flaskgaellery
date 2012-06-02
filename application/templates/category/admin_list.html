@@ -15,9 +15,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Description</th>
-                <th>Parent_id</th>
-                <th>Added on</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -27,12 +24,13 @@
             <tr>
                 <td>{{ category_id }}</td>
                 <td>{{ category.title }}</td>
-                <td>{{ category.description }}</td>
-                <td>{{ category.parent_id }}</td>
-                <td>{{ category.created.strftime('%b %d, %Y %I:%M %p') }}</td>
-                <td>
+                <td class="action-buttons">
+                    <button class="btn" onclick="editElement({{ category_id }}, categories); return false;"  
+                    	data-toggle="modal" data-target="#new-category-modal">
+                    	Edit
+                   	</button>
                     <form method="post" action="{{ url_for('delete_category', category_id=category_id) }}">
-                        <button class="btn">Delete</button>
+                        <button class="btn btn-danger" onclick="return confirm('Do you really want to delete it?');">Delete</button>
                     </form>
                 </td>
             </tr>
@@ -42,14 +40,16 @@
         </tbody>
     </table>
     <p>
-        <a class="btn btn-primary" data-toggle="modal" data-target="#new-category-modal">
+        <a class="btn btn-primary" data-toggle="modal" data-target="#new-category-modal" onclick="resetForm();">
             <i class="icon-plus-sign icon-white"></i>
             New category
         </a>
     </p>
 
     {% include 'category/new.html' %} {# pull in new_category form (modal dialog) #}
-
+    <script>
+    	{{ jsonify(categoriesJS, 'categories')|safe }};
+	</script>
 {% endblock content %}
 
 {% block tail_script %}

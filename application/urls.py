@@ -22,11 +22,14 @@ app.add_url_rule('/hello/<username>', 'say_hello', view_func=example.say_hello)
 app.add_url_rule('/examples', 'admin_examples', view_func=example.admin_examples, methods=['GET', 'POST'])
 app.add_url_rule('/examples/delete/<int:example_id>', view_func=example.delete_example, methods=['POST'])
 # Contrived admin-only view example
-app.add_url_rule('/admin_only', 'admin_only', view_func=example.admin_only)
-app.add_url_rule('/admin/categories', 'admin_categories', view_func=category.admin_categories, methods=['GET', 'POST'])
+app.add_url_rule('/admin', 'admin', view_func=category.admin)
+app.add_url_rule('/admin/categories/', 'admin_categories', view_func=category.admin_categories, methods=['GET', 'POST'])
+app.add_url_rule('/admin/categories/<int:parent_id>', 'admin_a_category', view_func=category.admin_categories, methods=['GET', 'POST'])
 app.add_url_rule('/admin/category_delete/<int:category_id>', 'delete_category', view_func=category.delete_category, methods=['GET', 'POST'])
-app.add_url_rule('/category/<int:category_id>', 'category', view_func=category.category, methods=['GET'])
-app.add_url_rule('/admin/images', 'admin_images', view_func=image.admin_images, methods=['GET', 'POST'])
+app.add_url_rule('/category/<int:parent_id>', 'category', view_func=category.category, methods=['GET'])
+
+app.add_url_rule('/admin/images/', 'admin_images', view_func=image.admin_images, methods=['GET', 'POST'])
+app.add_url_rule('/admin/images/<int:category_id>', 'admin_images_in_category', view_func=image.admin_images, methods=['GET', 'POST'])
 app.add_url_rule('/images', 'images', view_func=image.admin_images, methods=['GET'])
 app.add_url_rule('/admin/image_delete/<int:image_id>', 'delete_image', view_func=image.delete_image, methods=['GET', 'POST'])
 

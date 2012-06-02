@@ -11,25 +11,36 @@ from flask import render_template, flash, url_for, redirect
 from  application.decorators import login_required, admin_required
 from application.forms import CategoryForm
 from application.models import CategoryModel, ImageModel
-from application import app, models
 from flask.globals import request
 from flask.helpers import jsonify
-from repr import repr
+from application import app, models
+
+def v2m(form, mdl_obj):
+    for prop, val in vars(form).iteritems():
+        if not prop.startswith('__'):
+            if prop in dir(mdl_obj):
+                setattr(mdl_obj,prop,val.data)
+    pass
 
 @admin_required
-def admin_categories():
+def admin():
+    return redirect(url_for('admin_categories'), 302)
+    pass
+
+@admin_required
+def admin_categories(parent_id=-1):
     """List all categories"""
-    categories = CategoryModel.all()
+    categories = [c for c in CategoryModel.all().filter('parent_id', parent_id)]
     form = CategoryForm()
-    kvps = [(c.key().id(), c.title) for c in CategoryModel.all()]
-    kvps += [(-1, None)]
+    kvps = [(-1, None)]
+    kvps += [(c.key().id(), c.title) for c in CategoryModel.all()]
     form.parent_id.choices = kvps;
     if form.validate_on_submit():
-        category = CategoryModel(
-            title = form.title.data,
-            description = form.description.data,
-            parent_id = form.parent_id.data
-        )
+        if len(form.key_id.data) > 0 and long(form.key_id.data)  > 0:
+            category = CategoryModel.get_by_id(long(form.key_id.data)); 
+        else:
+            category = CategoryModel.
+        v2m(form, category)
         try:
             category.put()
             category_id = category.key().id()
@@ -39,7 +50,7 @@ def admin_categories():
             flash(u'App Engine Datastore is currently in read-only mode.', 'info')
             return redirect(url_for('admin_categories'))
         pass
-    return render_template('category/admin_list.html', categories=categories, form=form)
+    return render_template('category/admin_list.html', categories=categories, form=form, categoriesJS = [c.jsond() for c in categories])
 
 
 @admin_required
@@ -73,15 +84,15 @@ def init_sub_tree_along_path(category, path):
     pass
 
 
-def category(category_id):
-    ''' This will render the main page with the selected category defined by category_id, and with the
+def category(parent_id=-1):
+    ''' This will render the main page with the selected category defined by parent_id, and with the
     content that it contains  '''
-    contents = [c.jsond() for c in ImageModel.all().filter('category_id', category_id)]
+    contents = [c.jsond() for c in ImageModel.all().filter('category_id', parent_id)]
     if request.is_xhr:
-        categories = [c.jsond() for c in CategoryModel.all().filter('parent_id', category_id)]
+        categories = [c.jsond() for c in CategoryModel.all().filter('parent_id', parent_id)]
         return jsonify(categories=categories, contents=contents)
     else:
-        category = CategoryModel.get_by_id(category_id)
+        category = CategoryModel.get_by_id(parent_id)
         path = None
         if category:
             path = category.get_path_ids_to_root() + [category.key().id()]

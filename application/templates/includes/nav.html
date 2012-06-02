@@ -1,7 +1,7 @@
 <ul class="nav nav-pills nav-stacked">
 	{% for category in categories recursive %}
 		<li> 
-			<a href="{{ url_for('category', category_id=category.key().id()) }}" >
+			<a href="{{ url_for('category', parent_id=category.key().id()) }}" >
 				{{ category.title }}
 			</a>
 			{% if category.subcategories %}

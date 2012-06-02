@@ -11,8 +11,8 @@ import datetime
 
 class AbstractModel(db.Model):
     def jsond(self):
-        ''' will return a json representation of the objec'''
-        vals = {}
+        ''' will return a json representation of the object'''
+        vals = {'id': self.key().id()}
         for prop in self.properties():
             val = self.__getattribute__(prop)
             if type(val) is datetime.datetime:
@@ -31,9 +31,10 @@ class ExampleModel(AbstractModel):
 class CategoryModel(AbstractModel):
     """Category Model"""
     title = db.StringProperty(required=True)
-    description = db.TextProperty(required=False)
     parent_id = db.IntegerProperty(required=False)
-    index = db.IntegerProperty(required=False)
+    order = db.IntegerProperty(required=False)
+    visible = db.BooleanProperty(required=True)
+    autoscroll = db.BooleanProperty(required=True)
     created = db.DateTimeProperty(auto_now_add=True)
     
     subcategories = None

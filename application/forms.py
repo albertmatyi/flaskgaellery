@@ -23,6 +23,7 @@ class CategoryForm(wtf.Form):
     visible = wtf.BooleanField('Visible')
     autoscroll = wtf.BooleanField('Auto scroll')
     menu_entry = wtf.BooleanField('Menu entry')
+    non_menu_category = wtf.BooleanField('Non-menu category')
     key_id = wtf.HiddenField()
 
 class ImageForm(wtf.Form):

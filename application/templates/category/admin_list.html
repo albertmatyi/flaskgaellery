@@ -8,7 +8,8 @@
 
 {% block content %}
 
-    <h1 id="">All Categories</h1>
+    <h1>Categories</h1>
+    {% include "includes/category_breadcrumbs.html" %}
     <div>&nbsp;</div>
     <table class="table table-bordered table-striped">
         <thead>
@@ -47,8 +48,9 @@
     </p>
 
     {% include 'category/new.html' %} {# pull in new_category form (modal dialog) #}
-    <script>
-    	{{ jsonify(categoriesJS, 'categories')|safe }};
+    <script type="text/javascript">
+   		//store the categories data as a js variable
+    	{{ jsonify(categories, 'categories')|safe }};
 	</script>
 {% endblock content %}
 

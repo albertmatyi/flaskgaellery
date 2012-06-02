@@ -74,6 +74,19 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <div class="control-label">{{ form.non_menu_category.label }}</div>
+                    <div class="controls">
+                        {{ form.non_menu_category|safe }}
+                        {% if form.non_menu_category.errors %}
+                        <ul class="errors">
+                            {% for error in form.non_menu_category.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
                     <div class="controls">
                         <input class="btn btn-primary" type="submit" value="Add Category"/>
                         <button class="btn" data-dismiss="modal">Cancel</button>

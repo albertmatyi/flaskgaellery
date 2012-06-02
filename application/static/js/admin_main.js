@@ -23,13 +23,13 @@ var Utils = {
 
 function editElement(id, model) {
 	for (key in model[id]) {
-		if ($('input#' + key).length != 0) {
+		if ($('input#' + key + ', select#' + key).length != 0) {
 			try {
 				if ($('input#' + key).attr('type') === 'checkbox') {
 					$('input#' + key).attr('checked',
 							model[id][key] === 'True' ? 'checked' : false);
 				} else {
-					$('input#' + key).val(model[id][key]);
+					$('input#' + key + ', select#' + key).val(model[id][key]);
 				}
 			} catch (e) {
 				console.log('couldn\'t set ' + key)
@@ -40,7 +40,7 @@ function editElement(id, model) {
 
 function resetForm() {
 	formId = '';
-	$(formId + ' input').each(function(idx, el) {
+	$(formId + ' input' + ', select#' + key).each(function(idx, el) {
 		if ($(el).attr('id') != 'csrf_token' && $(el).attr('type') != 'submit') {
 			if ($(el).attr('type') == 'checkbox') {
 				$(el).attr('checked', false);

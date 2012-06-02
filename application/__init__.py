@@ -17,7 +17,8 @@ def random_int(a, b): return Random().randint(a,b)
 def json_helper(array, name):
     firstEl = True
     ret = ''
-    for el in array:
+    for elQry in array:
+        el = elQry.jsond()
         if not firstEl:
             ret = ret + ', '
         else:
@@ -27,7 +28,7 @@ def json_helper(array, name):
             ret = ret + ', \'' + str(prop) + '\'' + ': ' + '\'' + str(val) +'\''
             pass
         ret = ret + '}'
-    return name + ' = {' + ret+'}'
+    return 'var ' + name + ' = {' + ret+'}'
     pass
 
 

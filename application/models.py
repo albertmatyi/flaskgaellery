@@ -8,6 +8,7 @@ App Engine datastore models
 
 from google.appengine.ext import db
 import datetime
+from google.appengine.api import blobstore
 
 def v2m(form, mdl_obj):
     ''' 
@@ -17,10 +18,12 @@ def v2m(form, mdl_obj):
         if not prop.startswith('__'):
             if prop in dir(mdl_obj):
                 typ = type(getattr(mdl_obj, prop))
+                val = val.data
                 if typ is int or typ is long:
-                    setattr(mdl_obj, prop, long(val.data))
-                else:
-                    setattr(mdl_obj, prop, val.data)
+                    val = long(val)
+                elif typ is str:
+                    val = val.strip()
+                setattr(mdl_obj, prop, val)
     pass
 
 class AbstractModel(db.Model):
@@ -136,7 +139,6 @@ class CategoryModel(AbstractModel):
         '''
         category_path = [ROOT_CAT_DUMMY]
         category = None
-        
         if parent_id != ROOT_CAT_ID:
             category = CategoryModel.get_by_id(parent_id)
             category_path += category.get_path_to_root() + [category]
@@ -152,7 +154,7 @@ class CategoryModel(AbstractModel):
 
 class ImageModel(AbstractModel):
     """Image Model"""
-    title = db.StringProperty(required=False, default=' ')
+    title = db.StringProperty(required=False, default='')
     description = db.TextProperty(required=False)
     category_id = db.IntegerProperty(required=True, default=ROOT_CAT_ID)
     height = db.IntegerProperty(required=False)
@@ -161,6 +163,18 @@ class ImageModel(AbstractModel):
     image_thumb_blob_key = db.StringProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     order = db.IntegerProperty(required=True, default=0)
+    visible = db.BooleanProperty(required=True, default=True)
+    
+    
+    def delete_images(self):
+        '''
+            Deletes the associated images to the image parameter
+        '''
+        for field in [self.image_blob_key, self.image_thumb_blob_key]:
+            if field is not None and len(field.strip()) > 0:
+                blobstore.delete(field)
+        pass
+
     
 def initDB():
     CategoryModel(title='Home', parent_id= -1).put()

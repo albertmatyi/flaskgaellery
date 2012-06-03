@@ -25,18 +25,21 @@
     	<div class="bar" style="width: 100%;"></div>
     </div>
 	<div class="posts">
-		{% for i in range(0, 10) %} 
-			{% set randw = random_int(400, 740) %}
-			{% if randw % 3 and  i > 0 %}
+		{% for content in contents %} 
+			{% if content.image_blob_key %}
 				<div class="post image-post well" id="post{{ i }}">
-				<img height="515" width="{{ randw }}" class="fixie" />
+					<div class="img-info">
+						<h2>{{ content.title }}</h2>
+						<article>{{ content.description }}</article >
+					</div>
+					<img src="/blob/{{ content.image_blob_key }}" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
+				</div>
 			{% else %}
 				<div class="post text-post well" id="post{{ i }}">
-				<h2 class="fixie"></h2>
-				<article class="fixie"></article >
+					<h2>{{ content.title }}</h2>
+					<article>{{ content.description|safe }}</article >
+				</div>
 			{% endif %}
-				<div class="clearfix"></div>
-			</div>
 		{% endfor %}
 	</div>
 </div>

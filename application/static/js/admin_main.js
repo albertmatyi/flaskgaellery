@@ -25,13 +25,13 @@ function initForm(model, prefix) {
 	prefix = typeof prefix !== 'undefined' ? prefix : '';
 	for (key in model) {
 		uikey = prefix + '-' + key;
-		if ($('input#' + uikey + ', select#' + uikey).length != 0) {
+		selector = 'input#' + uikey + ', select#' + uikey + ', textarea#'+uikey;
+		if ($(selector).length != 0) {
 			try {
-				if ($('input#' + uikey).attr('type') === 'checkbox') {
-					$('input#' + uikey).attr('checked',
-							model[key] === 'True' ? 'checked' : false);
+				if ($(selector).prop('type') === 'checkbox') {
+					$(selector).prop('checked',	model[key] === 'True');
 				} else {
-					$('input#' + uikey + ', select#' + uikey).val(model[key]);
+					$(selector).val(model[key]);
 				}
 			} catch (e) {
 				console.log('couldn\'t set ' + prefix + '|' + key)

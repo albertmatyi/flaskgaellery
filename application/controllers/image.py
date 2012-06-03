@@ -13,11 +13,12 @@ from application.forms import ImageForm
 from application.models import ImageModel, CategoryModel, ROOT_CAT_ID, v2m
 from google.appengine.api import blobstore, images, files
 from werkzeug.datastructures import FileStorage
-from jinja2 import environment
-from flask.templating import Environment
+
+MAX_WIDTH=515
+MAX_HEIGHT=720
 
 @admin_required
-def create_thumbnail(blob_key):
+def create_thumbnail(blob_key, width=MAX_WIDTH, height=MAX_HEIGHT):
     ''' Creates a thumbnail for the image stored at blob_key 
     @param blob_key: the key for the blobstore where the image is stored
     @return: A touple containing: 
@@ -26,7 +27,7 @@ def create_thumbnail(blob_key):
             the height of the thumbnail
     '''
     img = images.Image(blob_key=blob_key,)
-    img.resize(width=80, height=100)
+    img.resize(width=width, height=height)
     thumbnail = img.execute_transforms(output_encoding=images.PNG)
     # Create the file
     file_name = files.blobstore.create(mime_type='image/png')
@@ -54,32 +55,33 @@ def admin_images(parent_id= -1):
             is_new = True
         v2m(form, image)
         category_id = long(form.category_id.data)
-        blob_key = ''
-        thumb_blob_key = ''
-        w = 0
-        h = 0
         if type(form.image.data) == FileStorage and (is_new or form.update_image.data):
             blob_key = form.image.data.mimetype_params['blob-key']
-            (thumb_blob_key, w, h) = create_thumbnail(blob_key)
-        elif not is_new and form.update_image: # we set to update with an empty image so we delete the one in the db
-            blobstore.delete([image.image_blob_key, image.image_thumb_blob_key ])
-        image.image_blob_key = blob_key
-        image.image_thumb_blob_key = thumb_blob_key
-        image.width = w   
-        image.height = h            
+            #create a small
+            (image.image_thumb_blob_key, image.width, image.height) = create_thumbnail(blob_key, 50, 50)
+            #and a slightly larger version 
+            (image.image_blob_key, image.width, image.height) = create_thumbnail(blob_key)
+            #delete the uploaded (possibly 'uge file)
+            blobstore.delete(blob_key)
+        elif not is_new and form.update_image.data: # we set to update with an empty image so we delete the one in the db
+            image.delete_images()
+            image.image_blob_key = ''
+            image.image_thumb_blob_key = ''
+            image.width = 0
+            image.height = 0
         try:
             image.put()
             image_id = image.key().id()
             flash(u'Image %s successfully saved.' % image_id, 'success')
             return redirect(url_for('admin_images_in_category', parent_id=category_id))
         except CapabilityDisabledError:
-            blobstore.delete([image.image_blob_key, image.image_thumb_blob_key ])
+            image.delete_images()
             flash(u'App Engine Datastore is currently in read-only mode.', 'info')
             return redirect(url_for('admin_images_in_category', parent_id=category_id))
         pass
     elif form.is_submitted():
         category_id = long(form.category_id.data)  
-    images = ImageModel.all().filter('category_id', category_id)
+    images = sorted(ImageModel.all().filter('category_id', category_id), key=lambda i: i.order)
     (categories, category_path, all_categories) = CategoryModel.get_categories_info(category_id)
     form.category_id.data = category_path[-1].key().id()
     return render_template('image/admin_images.html', images=images,
@@ -99,7 +101,7 @@ def delete_image(image_id):
     parent_id = image.category_id
     try:
         # delete image from blobstore
-        blobstore.delete([image.image_blob_key, image.image_thumb_blob_key ])
+        image.delete_images()
         # delete tha data entry
         image.delete()
         flash(u'Image %s successfully deleted.' % image_id, 'success')

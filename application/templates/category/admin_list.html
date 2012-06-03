@@ -16,6 +16,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Order</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                 <td>
                 	<a href="{{ url_for('admin_category', parent_id=category.key().id()) }}">{{ category.title }}</a>
                 </td>
+                <td>{{ category.order }}</td>
                 <td class="action-buttons">
                 	<form method="post" action="{{ url_for('delete_category', category_id=category_id) }}">
                         <button class="btn btn-danger" onclick="return confirm('Do you really want to delete it?');">Delete</button>

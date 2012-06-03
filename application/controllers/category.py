@@ -55,7 +55,7 @@ def admin_categories(parent_id=ROOT_CAT_ID):
         category = ROOT_CAT_DUMMY
         categories = [c for c in CategoryModel.get_root_categories(False)]
         form.parent_id.data = ROOT_CAT_ID
-    
+    categories = sorted(categories, key=lambda c: c.order)
     return render_template('category/admin_list.html', categories=categories, form=form, category_path=category_path, current_category=category, all_categories=[c for c in CategoryModel.all()])
 
 

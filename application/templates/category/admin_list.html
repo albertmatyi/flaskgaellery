@@ -24,15 +24,30 @@
             {% set category_id = category.key().id() %}
             <tr>
                 <td>{{ category_id }}</td>
-                <td>{{ category.title }}</td>
+                <td>
+                	<a href="{{ url_for('admin_category', parent_id=category.key().id()) }}">{{ category.title }}</a>
+                </td>
                 <td class="action-buttons">
-                    <button class="btn" onclick="editElement({{ category_id }}, categories); return false;"  
+                	<form method="post" action="{{ url_for('delete_category', category_id=category_id) }}">
+                        <button class="btn btn-danger" onclick="return confirm('Do you really want to delete it?');">Delete</button>
+                    </form>
+                    <div class="btn-group">
+	                   	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	                   		Move under
+ 							<span class="caret"></span>
+ 						</a>
+ 						<ul class="dropdown-menu">
+						{% for cat in all_categories %}
+ 							<li>
+ 								<a href="{{ url_for('move_category', category_id=category_id, parent_id=cat.key().id()) }}">{{ cat.title }}</a> 
+ 							</li>
+ 						{% endfor %}
+ 						</ul>
+					</div>
+					<button class="btn" onclick="editElement({{ category_id }}, categories); return false;"  
                     	data-toggle="modal" data-target="#new-category-modal">
                     	Edit
                    	</button>
-                    <form method="post" action="{{ url_for('delete_category', category_id=category_id) }}">
-                        <button class="btn btn-danger" onclick="return confirm('Do you really want to delete it?');">Delete</button>
-                    </form>
                 </td>
             </tr>
             {% else %}

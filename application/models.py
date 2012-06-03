@@ -16,7 +16,10 @@ def v2m(form, mdl_obj):
     for prop, val in vars(form).iteritems():
         if not prop.startswith('__'):
             if prop in dir(mdl_obj):
-                setattr(mdl_obj,prop,val.data)
+                if type(getattr(mdl_obj, prop)) is long:
+                    setattr(mdl_obj, prop, long(val.data))
+                else:
+                    setattr(mdl_obj, prop, val.data)
     pass
 
 class AbstractModel(db.Model):
@@ -47,6 +50,14 @@ ROOT_CAT_ID = -1
 '''
 ROOT_CAT_DUMMY = {'key': lambda : {'id': lambda : ROOT_CAT_ID}, 'title': 'Root'}
 
+
+class CircularCategoryException(Exception):
+    def __init__(self):
+        self.message = "The category cannot be the subcategory of itself or of one of its subcategories"
+        pass
+    pass
+
+
 class CategoryModel(AbstractModel):
     """Category Model"""
     title = db.StringProperty(required=True, default='Some title')
@@ -60,7 +71,7 @@ class CategoryModel(AbstractModel):
     subcategories = None
     
     @staticmethod
-    def get_root_categories(visibleOnly = True):
+    def get_root_categories(visibleOnly=True):
         ''' @return: The query for the root 
         '''
         qry = CategoryModel.all().filter('parent_id', ROOT_CAT_ID)
@@ -84,6 +95,19 @@ class CategoryModel(AbstractModel):
         ids = [el.key().id() for el in self.get_path_to_root()]
         return ids
         pass
+    
+    def validate(self):
+        if self.key().id() is not None and self.key().id() in CategoryModel.get_by_id(self.parent_id).get_path_ids_to_root()+ [self.key().id()]:
+            raise CircularCategoryException()
+            pass
+        pass
+    
+    def put(self):
+        '''
+            Overrides the saving to provide an extra validation
+        '''
+        if self.validate():
+            self.parent().put()
     
     def get_path_to_root(self):
         '''
@@ -109,17 +133,17 @@ class ImageModel(AbstractModel):
     order = db.IntegerProperty(required=True, default=0)
     
 def initDB():
-    CategoryModel(title='Home', parent_id=-1).put()
-    key = CategoryModel(title='Portraits', parent_id=-1).put()
+    CategoryModel(title='Home', parent_id= -1).put()
+    key = CategoryModel(title='Portraits', parent_id= -1).put()
     CategoryModel(title='Men', parent_id=key.id()).put()
     CategoryModel(title='Women', parent_id=key.id()).put()
-    key = CategoryModel(title='Cities', parent_id=-1).put()
+    key = CategoryModel(title='Cities', parent_id= -1).put()
     CategoryModel(title='London', parent_id=key.id()).put()
     CategoryModel(title='Antwerp', parent_id=key.id()).put()
-    key = CategoryModel(title='Cities', parent_id=-1).put()
+    key = CategoryModel(title='Cities', parent_id= -1).put()
     CategoryModel(title='London', parent_id=key.id()).put()
     CategoryModel(title='Antwerp', parent_id=key.id()).put()
-    CategoryModel(title='About', parent_id=-1).put()
-    CategoryModel(title='Contact', parent_id=-1).put()
+    CategoryModel(title='About', parent_id= -1).put()
+    CategoryModel(title='Contact', parent_id= -1).put()
     pass
     

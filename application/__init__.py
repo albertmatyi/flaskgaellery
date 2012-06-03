@@ -25,7 +25,7 @@ def json_helper(array, name):
             firstEl = False
         ret = ret + str(el['id']) + ' : { \'key_id\':'+ str(el['id'])
         for prop, val in el.items():
-            ret = ret + ', \'' + str(prop) + '\'' + ': ' + '\'' + str(val) +'\''
+            ret = ret + ', \'' + str(prop) + '\'' + ': ' + '\'' + str(val).replace('\'', '\\\'') +'\''
             pass
         ret = ret + '}'
     return 'var ' + name + ' = {' + ret+'}'

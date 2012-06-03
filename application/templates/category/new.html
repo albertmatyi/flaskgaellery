@@ -1,7 +1,7 @@
 <div class="modal fade" id="new-category-modal">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
-        <h3>Add a New Category</h3>
+        <h3>Edit Category</h3>
     </div>
     <div class="modal-body">
         <form id="new-category-form" class="well form-horizontal"
@@ -15,19 +15,6 @@
                         {% if form.title.errors %}
                         <ul class="errors">
                             {% for error in form.title.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label">{{ form.parent_id.label }}</div>
-                    <div class="controls">
-                        {{ form.parent_id|safe }}
-                        {% if form.parent_id.errors %}
-                        <ul class="errors">
-                            {% for error in form.parent_id.errors %}
                             <li>{{ error }}</li>
                             {% endfor %}
                         </ul>
@@ -88,7 +75,7 @@
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input class="btn btn-primary" type="submit" value="Add Category"/>
+                        <input class="btn btn-primary" type="submit" value="Save Category"/>
                         <button class="btn" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>

@@ -18,13 +18,13 @@ class ExampleForm(wtf.Form):
 
 class CategoryForm(wtf.Form):
     title = wtf.TextField('Title', validators=[validators.Required()])
-    parent_id = wtf.SelectField('Parent category', coerce=int)
     order = wtf.IntegerField('Order')
     visible = wtf.BooleanField('Visible')
     autoscroll = wtf.BooleanField('Auto scroll')
     menu_entry = wtf.BooleanField('Menu entry')
     non_menu_category = wtf.BooleanField('Non-menu category')
     key_id = wtf.HiddenField()
+    parent_id = wtf.HiddenField()
 
 class ImageForm(wtf.Form):
     title = wtf.TextField('Title', validators=[validators.Required()])

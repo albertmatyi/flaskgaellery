@@ -26,6 +26,7 @@ app.add_url_rule('/admin', 'admin', view_func=category.admin)
 app.add_url_rule('/admin/categories/', 'admin_categories', view_func=category.admin_categories, methods=['GET', 'POST'])
 app.add_url_rule('/admin/categories/-1', 'admin_categories', view_func=category.admin_categories, methods=['GET', 'POST'])
 app.add_url_rule('/admin/categories/<int:parent_id>', 'admin_category', view_func=category.admin_categories, methods=['GET', 'POST'])
+app.add_url_rule('/admin/categories/move/<int:category_id>/<int:parent_id>', 'move_category', view_func=category.move_category, methods=['GET'])
 app.add_url_rule('/admin/category_delete/<int:category_id>', 'delete_category', view_func=category.delete_category, methods=['GET', 'POST'])
 app.add_url_rule('/category/<int:parent_id>', 'category', view_func=category.category, methods=['GET'])
 

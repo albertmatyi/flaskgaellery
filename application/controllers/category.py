@@ -7,7 +7,7 @@ from application import app, models
 from application.decorators import login_required, admin_required
 from application.forms import CategoryForm
 from application.models import CategoryModel, ImageModel, v2m, ROOT_CAT_ID,\
-    ROOT_CAT_DUMMY
+    ROOT_CAT_DUMMY, CircularCategoryException
 from flask import render_template, flash, url_for, redirect
 from flask.globals import request
 from flask.helpers import jsonify
@@ -24,20 +24,7 @@ def admin():
 @admin_required
 def admin_categories(parent_id=ROOT_CAT_ID):
     """List all categories"""
-    
-    category_path = [ROOT_CAT_DUMMY]
-    category = None
-    if parent_id != ROOT_CAT_ID:
-        category = CategoryModel.get_by_id(parent_id)
-        category_path += category.get_path_to_root() + [category]
-        categories = [c for c in category.get_subcategories(False)]
-    else:
-        category = ROOT_CAT_DUMMY
-        categories = [c for c in CategoryModel.get_root_categories(False)]
     form = CategoryForm()
-    kvps = [(ROOT_CAT_ID, None)]
-    kvps += [(c.key().id(), c.title) for c in CategoryModel.all()]
-    form.parent_id.choices = kvps;
     if form.validate_on_submit():
         if len(form.key_id.data) > 0 and long(form.key_id.data)  > 0:
             category = CategoryModel.get_by_id(long(form.key_id.data)); 
@@ -48,12 +35,28 @@ def admin_categories(parent_id=ROOT_CAT_ID):
             category.put()
             category_id = category.key().id()
             flash(u'Category %s successfully saved.' % category_id, 'success')
-            return redirect(url_for('admin_categories'))
+            return redirect(url_for('admin_category', parent_id=category.parent_id))
         except CapabilityDisabledError:
             flash(u'App Engine Datastore is currently in read-only mode.', 'info')
-            return redirect(url_for('admin_categories'))
+            return redirect(url_for('admin_category', parent_id=category.parent_id))
+        except CircularCategoryException as cce:
+            flash(cce.message, 'error')
+            return redirect(url_for('admin_category', parent_id=category.parent_id))
         pass
-    return render_template('category/admin_list.html', categories=categories, form=form, category_path=category_path, current_category=category)
+    category_path = [ROOT_CAT_DUMMY]
+    category = None
+    
+    if parent_id != ROOT_CAT_ID:
+        category = CategoryModel.get_by_id(parent_id)
+        category_path += category.get_path_to_root() + [category]
+        categories = [c for c in category.get_subcategories(False)]
+        form.parent_id.data = category.key().id()
+    else:
+        category = ROOT_CAT_DUMMY
+        categories = [c for c in CategoryModel.get_root_categories(False)]
+        form.parent_id.data = ROOT_CAT_ID
+    
+    return render_template('category/admin_list.html', categories=categories, form=form, category_path=category_path, current_category=category, all_categories=[c for c in CategoryModel.all()])
 
 
 @admin_required
@@ -117,6 +120,18 @@ def category(parent_id=ROOT_CAT_ID):
 def home():
     ''' This will render the root category'''
     return category(ROOT_CAT_ID)
+    pass
+
+@admin_required
+def move_category(category_id, parent_id=ROOT_CAT_ID):
+    cat = CategoryModel.get_by_id(category_id)
+    cat.parent_id = parent_id
+    try:
+        cat.put()
+    except CircularCategoryException as cce:
+        flash(cce.message, 'error')
+        return redirect(url_for('admin_category', parent_id=parent_id))
+    return redirect(url_for('admin_category', parent_id=parent_id), 302);
     pass
 
 

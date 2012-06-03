@@ -97,7 +97,8 @@ class CategoryModel(AbstractModel):
         pass
     
     def validate(self):
-        if self.key().id() is not None and self.key().id() in CategoryModel.get_by_id(self.parent_id).get_path_ids_to_root()+ [self.key().id()]:
+        par_cat = CategoryModel.get_by_id(self.parent_id)
+        if self.key().id() is not None and par_cat is not None and self.key().id() in par_cat.get_path_ids_to_root()+ [self.key().id()]:
             raise CircularCategoryException()
             pass
         pass

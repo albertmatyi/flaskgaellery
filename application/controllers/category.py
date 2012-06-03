@@ -6,12 +6,14 @@ This controller is responsible for handling Categories
 from application import app, models
 from application.decorators import login_required, admin_required
 from application.forms import CategoryForm
-from application.models import CategoryModel, ImageModel, v2m, ROOT_CAT_ID,\
+from application.models import CategoryModel, ImageModel, v2m, ROOT_CAT_ID, \
     ROOT_CAT_DUMMY, CircularCategoryException
 from flask import render_template, flash, url_for, redirect
 from flask.globals import request
 from flask.helpers import jsonify
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
+from wtforms.ext.appengine.db import model_form
+import wtforms
 
 
 #from models import CategoryModel
@@ -24,12 +26,12 @@ def admin():
 @admin_required
 def admin_categories(parent_id=ROOT_CAT_ID):
     """List all categories"""
-    form = CategoryForm()
+    form = CategoryForm(prefix='category')
     if form.validate_on_submit():
-        if len(form.key_id.data) > 0 and long(form.key_id.data)  > 0:
+        if len(form.key_id.data) > 0 and long(form.key_id.data) > 0:
             category = CategoryModel.get_by_id(long(form.key_id.data)); 
         else:
-            category = CategoryModel()                        
+            category = CategoryModel()
         v2m(form, category)
         try:
             category.put()
@@ -43,33 +45,31 @@ def admin_categories(parent_id=ROOT_CAT_ID):
             flash(cce.message, 'error')
             return redirect(url_for('admin_category', parent_id=category.parent_id))
         pass
-    category_path = [ROOT_CAT_DUMMY]
-    category = None
-    
-    if parent_id != ROOT_CAT_ID:
-        category = CategoryModel.get_by_id(parent_id)
-        category_path += category.get_path_to_root() + [category]
-        categories = [c for c in category.get_subcategories(False)]
-        form.parent_id.data = category.key().id()
-    else:
-        category = ROOT_CAT_DUMMY
-        categories = [c for c in CategoryModel.get_root_categories(False)]
-        form.parent_id.data = ROOT_CAT_ID
-    categories = sorted(categories, key=lambda c: c.order)
-    return render_template('category/admin_list.html', categories=categories, form=form, category_path=category_path, current_category=category, all_categories=[c for c in CategoryModel.all()])
-
+    elif form.is_submitted():
+        parent_id = long(form.parent_id.data)
+    (categories, category_path, all_categories) = CategoryModel.get_categories_info(parent_id)
+    form.parent_id.data = category_path[-1].key().id()
+    reset_category=CategoryModel()
+    reset_category.parent_id=parent_id
+    return render_template('category/admin_categories.html', 
+                           categories=categories, form=form, 
+                           category_path=category_path, 
+                           current_category=category_path[-1], 
+                           all_categories=all_categories, 
+                           reset_category=reset_category)
 
 @admin_required
 def delete_category(category_id):
     """Delete an category object"""
     category = CategoryModel.get_by_id(category_id)
+    parent_id = category.parent_id
     try:
         category.delete()
         flash(u'Category %s successfully deleted.' % category_id, 'success')
-        return redirect(url_for('admin_categories'))
     except CapabilityDisabledError:
         flash(u'App Engine Datastore is currently in read-only mode.', 'info')
-        return redirect(url_for('admin_categories'))
+    return redirect(url_for('admin_category', parent_id=parent_id))
+    
 @admin_required
 @app.route('/admin/initdb')
 def initDB():

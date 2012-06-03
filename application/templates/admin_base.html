@@ -18,10 +18,11 @@
 
 <body>
     <div id="header">
-        {% include 'includes/admin_nav.html' %} {# pull in navbar #}
+        {% include 'includes/admin_hdr.html' %} {# pull in titlebar #}
     </div>
     <div class="container" id="maincontent">
         {% include 'includes/flash_message.html' %} {# page-level feedback notices #}
+        {% include 'includes/admin_nav.html' %}
         <div id="body_content">
             {% block content %}<!-- main content area -->{% endblock %}
         </div>

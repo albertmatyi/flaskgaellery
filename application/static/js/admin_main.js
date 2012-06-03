@@ -21,32 +21,21 @@ var Utils = {
 
 /* Your custom JavaScript here */
 
-function editElement(id, model) {
-	for (key in model[id]) {
-		if ($('input#' + key + ', select#' + key).length != 0) {
+function initForm(model, prefix) {
+	prefix = typeof prefix !== 'undefined' ? prefix : '';
+	for (key in model) {
+		uikey = prefix + '-' + key;
+		if ($('input#' + uikey + ', select#' + uikey).length != 0) {
 			try {
-				if ($('input#' + key).attr('type') === 'checkbox') {
-					$('input#' + key).attr('checked',
-							model[id][key] === 'True' ? 'checked' : false);
+				if ($('input#' + uikey).attr('type') === 'checkbox') {
+					$('input#' + uikey).attr('checked',
+							model[key] === 'True' ? 'checked' : false);
 				} else {
-					$('input#' + key + ', select#' + key).val(model[id][key]);
+					$('input#' + uikey + ', select#' + uikey).val(model[key]);
 				}
 			} catch (e) {
-				console.log('couldn\'t set ' + key)
+				console.log('couldn\'t set ' + prefix + '|' + key)
 			}
 		}
 	}
-}
-
-function resetForm() {
-	formId = '';
-	$(formId + ' input' + ', select#' + key).each(function(idx, el) {
-		if ($(el).attr('id') != 'csrf_token' && $(el).attr('type') != 'submit') {
-			if ($(el).attr('type') == 'checkbox') {
-				$(el).attr('checked', false);
-			} else {
-				$(el).val(undefined);
-			}
-		}
-	});
 }

@@ -28,7 +28,7 @@ def json_helper(array, name):
             ret = ret + ', \'' + str(prop) + '\'' + ': ' + '\'' + str(val).replace('\'', '\\\'') +'\''
             pass
         ret = ret + '}'
-    return 'var ' + name + ' = {' + ret+'}'
+    return 'var ' + name + ' = {' + ret+'};'
     pass
 
 

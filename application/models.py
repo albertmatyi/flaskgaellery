@@ -16,7 +16,8 @@ def v2m(form, mdl_obj):
     for prop, val in vars(form).iteritems():
         if not prop.startswith('__'):
             if prop in dir(mdl_obj):
-                if type(getattr(mdl_obj, prop)) is long:
+                typ = type(getattr(mdl_obj, prop))
+                if typ is int or typ is long:
                     setattr(mdl_obj, prop, long(val.data))
                 else:
                     setattr(mdl_obj, prop, val.data)
@@ -25,7 +26,7 @@ def v2m(form, mdl_obj):
 class AbstractModel(db.Model):
     def jsond(self):
         ''' will return a json representation of the object'''
-        vals = {'id': self.key().id()}
+        vals = {'id': self.key().id()} if self.is_saved() else { 'id': '0' } 
         for prop in self.properties():
             val = self.__getattribute__(prop)
             if type(val) is datetime.datetime:
@@ -34,13 +35,17 @@ class AbstractModel(db.Model):
             vals[prop] = val
         return vals
 
-class ExampleModel(AbstractModel):
-    """Example Model"""
-    example_name = db.StringProperty(required=True)
-    example_description = db.TextProperty(required=True)
-    added_by = db.UserProperty()
-    timestamp = db.DateTimeProperty(auto_now_add=True)
+class CategoryDummy(object):
+    def __init__(self):
+        self.title = 'Root'
+        pass
+    def key(self):
+        return self
+    def id(self): #@ReservedAssignment
+        return ROOT_CAT_ID
+    pass
 
+    
 '''
     The virtual id of the root category
 '''
@@ -48,8 +53,7 @@ ROOT_CAT_ID = -1
 '''
     A dummy category object containing the ROOT_CAT_ID (@key().id()) and a title <Root>
 '''
-ROOT_CAT_DUMMY = {'key': lambda : {'id': lambda : ROOT_CAT_ID}, 'title': 'Root'}
-
+ROOT_CAT_DUMMY = CategoryDummy()
 
 class CircularCategoryException(Exception):
     def __init__(self):
@@ -60,12 +64,12 @@ class CircularCategoryException(Exception):
 
 class CategoryModel(AbstractModel):
     """Category Model"""
-    title = db.StringProperty(required=True, default='Some title')
+    title = db.StringProperty(required=True, default=' ')
     parent_id = db.IntegerProperty(required=False)
     order = db.IntegerProperty(required=True, default=0)
     visible = db.BooleanProperty(required=True, default=False)
     non_menu_category = db.BooleanProperty(required=True, default=False)
-    autoscroll = db.BooleanProperty(required=True, default=True)
+    autoscroll = db.BooleanProperty(required=True, default=False)
     created = db.DateTimeProperty(auto_now_add=True)
     
     subcategories = None
@@ -97,10 +101,9 @@ class CategoryModel(AbstractModel):
         pass
     
     def validate(self):
-        par_cat = CategoryModel.get_by_id(self.parent_id)
-        if self.key().id() is not None and par_cat is not None and self.key().id() in par_cat.get_path_ids_to_root()+ [self.key().id()]:
+        if self.is_saved() and self.key().id() in self.get_path_ids_to_root():
             raise CircularCategoryException()
-            pass
+        return True
         pass
     
     def put(self):
@@ -108,7 +111,7 @@ class CategoryModel(AbstractModel):
             Overrides the saving to provide an extra validation
         '''
         if self.validate():
-            self.parent().put()
+            super(CategoryModel, self).put()
     
     def get_path_to_root(self):
         '''
@@ -120,12 +123,38 @@ class CategoryModel(AbstractModel):
             parent = CategoryModel.get_by_id(self.parent_id)
             return [parent] + parent.get_path_to_root() 
         pass
+    
+    @staticmethod
+    def get_categories_info(parent_id):
+        '''
+            Retrieves info related to category identified by parent_id
+            
+            @return (categories, category_path, all_categories)
+                * categories - that have parent_id the same as the param
+                * the path from root to category identified by parent_id
+                * all categories (regardless of parent_id)
+        '''
+        category_path = [ROOT_CAT_DUMMY]
+        category = None
+        
+        if parent_id != ROOT_CAT_ID:
+            category = CategoryModel.get_by_id(parent_id)
+            category_path += category.get_path_to_root() + [category]
+            categories = [c for c in category.get_subcategories(False)]
+        else:
+            category = ROOT_CAT_DUMMY
+            categories = [c for c in CategoryModel.get_root_categories(False)]
+        categories = sorted(categories, key=lambda c: c.order)
+        all_categories = [ROOT_CAT_DUMMY] + [c for c in CategoryModel.all()]
+        return (categories, category_path, all_categories)
+        pass
+
 
 class ImageModel(AbstractModel):
     """Image Model"""
-    title = db.StringProperty(required=True, default='Title')
+    title = db.StringProperty(required=False, default=' ')
     description = db.TextProperty(required=False)
-    category_id = db.IntegerProperty(required=False)
+    category_id = db.IntegerProperty(required=True, default=ROOT_CAT_ID)
     height = db.IntegerProperty(required=False)
     width = db.IntegerProperty(required=False)
     image_blob_key = db.StringProperty()

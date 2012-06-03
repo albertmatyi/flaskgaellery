@@ -11,11 +11,6 @@ See: http://flask.pocoo.org/docs/patterns/wtforms/
 from flaskext import wtf
 from flaskext.wtf import validators
 
-
-class ExampleForm(wtf.Form):
-    example_name = wtf.TextField('Name', validators=[validators.Required()])
-    example_description = wtf.TextAreaField('Description', validators=[validators.Required()])
-
 class CategoryForm(wtf.Form):
     title = wtf.TextField('Title', validators=[validators.Required()])
     order = wtf.IntegerField('Order')
@@ -27,7 +22,11 @@ class CategoryForm(wtf.Form):
     parent_id = wtf.HiddenField()
 
 class ImageForm(wtf.Form):
-    title = wtf.TextField('Title', validators=[validators.Required()])
+    title = wtf.TextField('Title')
     description = wtf.TextAreaField('Description')
-    category_id = wtf.SelectField('Parent category', coerce=int)
+    order = wtf.IntegerField('Order', default=0)
+    visible = wtf.BooleanField('Visible')
+    update_image = wtf.BooleanField('Update image');
     image = wtf.FileField('Image')
+    category_id = wtf.HiddenField()
+    key_id = wtf.HiddenField()

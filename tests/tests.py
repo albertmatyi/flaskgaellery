@@ -44,8 +44,8 @@ class DemoTestCase(unittest.TestCase):
         assert 'Hello world' in rv.data
 
     def test_displays_no_data(self):
-        rv = self.app.get('/examples')
-        assert 'No examples yet' in rv.data
+        rv = self.app.get('/categories')
+        assert 200 is rv.status_code
 
     def test_inserts_data(self):
         self.setCurrentUser(u'john@example.com', u'123')

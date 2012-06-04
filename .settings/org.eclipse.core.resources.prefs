@@ -4,6 +4,7 @@ encoding//blinker/base.py=utf-8
 encoding//flask/__init__.py=utf-8
 encoding//flask/app.py=utf-8
 encoding//flask/helpers.py=utf-8
+encoding//flaskext/fmarkdown.py=utf-8
 encoding//tests/tests.py=utf-8
 encoding//werkzeug/contrib/kickstart.py=utf-8
 encoding//werkzeug/datastructures.py=utf-8

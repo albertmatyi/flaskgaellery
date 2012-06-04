@@ -6,13 +6,19 @@ Initialize Flask app
 from flask import Flask
 from random import random, Random
 from flask.helpers import jsonify, json
-from flaskext.markdown import Markdown
 import re
 from google.appengine.api import datastore_types
+import sys
+import os
 
 app = Flask('application')
 app.config.from_object('application.settings')
 
+'''
+    Add markdown support
+'''
+#sys.path.append(os.path.join(os.path.dirname(file), 'lib'))
+from flaskext.fmarkdown import Markdown
 Markdown(app)
 
 import urls

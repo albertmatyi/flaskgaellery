@@ -1,4 +1,8 @@
 <ul class="nav nav-pills nav-stacked">
+	<li class="nav-header">
+		<a href="{{url_for('home')}}"> Anabella Veress <small> Photography </small></a>
+		<small>Photographer in New York</small>
+	</li>
 	{% for category in categories recursive %}
 		<li> 
 			<a href="{{ url_for('category', parent_id=category.key().id()) }}" >

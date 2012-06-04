@@ -4,17 +4,14 @@ This controller is responsible for handling Categories
 
 
 from application import app, models
-from application.decorators import login_required, admin_required
+from application.decorators import  admin_required
 from application.forms import CategoryForm
 from application.models import CategoryModel, ImageModel, v2m, ROOT_CAT_ID, \
-    ROOT_CAT_DUMMY, CircularCategoryException
+ CircularCategoryException
 from flask import render_template, flash, url_for, redirect
 from flask.globals import request
 from flask.helpers import jsonify
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
-from wtforms.ext.appengine.db import model_form
-import wtforms
-
 
 #from models import CategoryModel
 
@@ -49,13 +46,13 @@ def admin_categories(parent_id=ROOT_CAT_ID):
         parent_id = long(form.parent_id.data)
     (categories, category_path, all_categories) = CategoryModel.get_categories_info(parent_id)
     form.parent_id.data = category_path[-1].key().id()
-    reset_category=CategoryModel()
-    reset_category.parent_id=parent_id
-    return render_template('category/admin_categories.html', 
-                           categories=categories, form=form, 
-                           category_path=category_path, 
-                           current_category=category_path[-1], 
-                           all_categories=all_categories, 
+    reset_category = CategoryModel()
+    reset_category.parent_id = parent_id
+    return render_template('category/admin_categories.html',
+                           categories=categories, form=form,
+                           category_path=category_path,
+                           current_category=category_path[-1],
+                           all_categories=all_categories,
                            reset_category=reset_category)
 
 @admin_required

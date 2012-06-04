@@ -1,0 +1,100 @@
+<div class="modal fade" id="new-image-modal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Edit Image</h3>
+    </div>
+    <div class="modal-body">
+        <form id="new-image-form" class="well form-horizontal"
+            action="{{ upload_url }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+            <fieldset>
+                {{ form.hidden_tag() }}
+                <div class="control-group">
+                    <div class="control-label">{{ form.title.label }}</div>
+                    <div class="controls">
+                        {{ form.title|safe }}
+                        {% if form.title.errors %}
+                        <ul class="errors">
+                            {% for error in form.title.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group" id="update-image-control" onclick="$('#image-image').prop('disabled', !$('#image-update_image').prop('checked'));">
+                    <div class="control-label">{{ form.update_image.label }}</div>
+                    <div class="controls">
+                        {{ form.update_image|safe }}
+                        {% if form.update_image.errors %}
+                        <ul class="errors">
+                            {% for error in form.update_image.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.image.label }}</div>
+                    <div class="controls">
+                        {{ form.image|safe }}
+                        {% if form.image.errors %}
+                        <ul class="errors">
+                            {% for error in form.image.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.description.label }}</div>
+                    <div class="controls">
+                        {{ form.description|safe }}
+                        {% if form.description.errors %}
+                        <ul class="errors">
+                            {% for error in form.description.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.order.label }}</div>
+                    <div class="controls">
+                        {{ form.order|safe }}
+                        {% if form.order.errors %}
+                        <ul class="errors">
+                            {% for error in form.order.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">{{ form.visible.label }}</div>
+                    <div class="controls">
+                        {{ form.visible|safe }}
+                        {% if form.visible.errors %}
+                        <ul class="errors">
+                            {% for error in form.visible.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <div class="controls">
+                        <input class="btn btn-primary" type="submit" value="Save Image"/>
+                        <button class="btn" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+

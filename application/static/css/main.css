@@ -1,30 +1,42 @@
-
 /* Main stylesheet */
 
 /* Your customizations here */
-
-.container-fluid, #body_content, #navigation{
+.container-fluid,#body_content,#navigation {
 	height: 570px;
 }
 
-.nav ul.nav{
+.nav-header a,.nav-header small {
+	font-variant: normal;
+	text-transform: lowercase;
+}
+
+.nav-header a {
+	font-size: 1.2em;
+}
+
+.nav-header small {
+	font-size: .8em;
+	text-transform: uppercase;
+}
+
+.nav ul.nav {
 	padding-left: 1em;
 }
 
-.post-container{
+.post-container {
 	overflow-x: hidden;
 	overflow-y: hidden;
-/*  + 40px for well padding & +20px for scrollbar*/
+	/*  + 40px for well padding & +20px for scrollbar*/
 	height: 575px;
 }
 
 #loader {
 	width: 300px;
 	margin: 0 auto;
-	margin-top:230px;
+	margin-top: 230px;
 }
 
-.posts{
+.posts {
 	height: 100%;
 	padding: 0;
 	overflow: hidden;
@@ -46,4 +58,55 @@
 	float: left;
 	position: relative;
 	top: 5000px;
+}
+
+.img-data,.img-info-container {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	overflow-x: hidden;
+}
+
+.img-info-container {
+	position:relative;
+    top: -515px;
+}
+
+.img-info {
+	background-color: rgba(255, 255, 255, .4);
+	position: relative;
+	left: 100%;
+	padding: 15px;
+	max-height: 485px;
+}
+
+.img-info.active{
+	left: 0;
+}
+
+.img-info>article,.img-info>aside,.img-info>details,.img-info>figcaption,.img-info>figure,.img-info>footer,.img-info>header,.img-info>hgroup,.img-info>nav,.img-info>section{
+	width: 100%;	
+}
+
+ul.img-controls,ul.img-controls li {
+	margin: 0;
+	padding: 0;
+}
+
+ul.img-controls {
+	list-style: none;
+	float: right;
+	position: relative;
+	top: -1030px;
+	right: -15px;
+	float: right;
+}
+
+ul.img-controls li {
+	cursor: pointer;
+}
+
+.img-info h2,.img-info p {
+	width: 100%;
 }

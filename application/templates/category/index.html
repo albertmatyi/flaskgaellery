@@ -1,6 +1,72 @@
-
 {% extends "base.html" %}
+{% block style_block %}
+{% endblock %}
+
+{% block content %}
+<div class="post-container" id="post-container">
+	<div class="progress progress-striped active" id="loader">
+    	<div class="bar" style="width: 100%;"></div>
+    </div>
+	<div class="posts">
+		{% for content in contents %} 
+			{% if content.image_blob_key %}
+				<div class="post image-post well" id="post{{ i }}">
+					<div class="img-data">
+						<img src="/blob/{{ content.image_blob_key }}" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
+					</div>
+					<div class="img-info-container">
+						{% if content.title %}
+						<div class="img-info"  style="width: {{ content.width-30 }}px;" id="content-{{ content.id }}">
+							<h4>{{ content.title }}</h4>
+							<article>{{ content.description|markdown|safe }}</article >
+						</div>
+						{% endif %}
+					</div>
+						<ul class="img-controls">
+							<li><a href="#" title="Fullscreen"><i class="icon-fullscreen" ></i></a></li>
+							<li><a href="#" title="Show details" onclick="showDetails({{content.id}}, this);return false;"><i class="icon-chevron-left"></i></a></li>
+						</ul>
+				</div>
+			{% else %}
+				<div class="post text-post well" id="post{{ i }}">
+					<h3>{{ content.title }}</h3>
+					<article>{{ content.description|markdown|safe }}</article >
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+<div class="pagination">
+	<ul>
+		<li><a href="#" onclick="return gotoPrevPost();">Prev</a></li>
+			{% for i in range(0, len(contents)) %}
+		<li><a href="#post{{i}}" onclick="return gotoPost({{ i }});">{{ i }}</a></li>
+			{% endfor %}		
+    	<li><a href="#" onclick="return gotoNextPost();">Next</a></li>
+	</ul>
+</div>
+{% endblock %}
+
 {% block tail_script %}
+<script type="text/javascript">
+	/* <![CDATA[ */
+	function showDetails(id, btnA){
+		btn = $('i', btnA);
+		show = btn.hasClass('icon-chevron-left');
+		if(show){
+			btn.removeClass('icon-chevron-left');
+			btn.addClass('icon-chevron-right');
+			btn.prop('title', 'Hide details');
+		} else {
+			btn.addClass('icon-chevron-left');
+			btn.removeClass('icon-chevron-right');
+			btn.prop('title', 'Show details');
+		}
+		$('#content-'+id).toggleClass('active');
+	}
+	
+	/* ]]> */
+	</script>
 <!-- 	Fixie -->
 	<script type="text/javascript" src="https://raw.github.com/rthprog/fixie/master/fixie_min.js"></script>
 	
@@ -15,42 +81,3 @@
 <!-- 		<script type="text/javascript" src="/static/js/lib/css3-select.jquery.js"></script> -->
 	{% endif %}
 {% endblock %}
-
-{% block style_block %}
-{% endblock %}
-
-{% block content %}
-<div class="post-container" id="post-container">
-	<div class="progress progress-striped active" id="loader">
-    	<div class="bar" style="width: 100%;"></div>
-    </div>
-	<div class="posts">
-		{% for content in contents %} 
-			{% if content.image_blob_key %}
-				<div class="post image-post well" id="post{{ i }}">
-					<div class="img-info">
-						<h2>{{ content.title }}</h2>
-						<article>{{ content.description }}</article >
-					</div>
-					<img src="/blob/{{ content.image_blob_key }}" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
-				</div>
-			{% else %}
-				<div class="post text-post well" id="post{{ i }}">
-					<h2>{{ content.title }}</h2>
-					<article>{{ content.description|safe }}</article >
-				</div>
-			{% endif %}
-		{% endfor %}
-	</div>
-</div>
-<div class="pagination">
-	<ul>
-		<li><a href="#" onclick="return gotoPrevPost();">Prev</a></li>
-			{% for i in range(0, 10) %}
-		<li><a href="#post{{i}}" onclick="return gotoPost({{ i }});">{{ i }}</a></li>
-			{% endfor %}		
-    	<li><a href="#" onclick="return gotoNextPost();">Next</a></li>
-	</ul>
-</div>
-{% endblock %}
-

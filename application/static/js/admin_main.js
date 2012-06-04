@@ -29,7 +29,7 @@ function initForm(model, prefix) {
 		if ($(selector).length != 0) {
 			try {
 				if ($(selector).prop('type') === 'checkbox') {
-					$(selector).prop('checked',	model[key] === 'True');
+					$(selector).prop('checked',	model[key]);
 				} else {
 					$(selector).val(model[key]);
 				}

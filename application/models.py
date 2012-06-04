@@ -28,13 +28,17 @@ def v2m(form, mdl_obj):
 
 class AbstractModel(db.Model):
     def jsond(self):
-        ''' will return a json representation of the object'''
+        ''' will return a dictionary, prepared for json representation of the object'''
+        
+        #FIXME method doesn't do what it's supposed to
         vals = {'id': self.key().id()} if self.is_saved() else { 'id': '0' } 
         for prop in self.properties():
             val = self.__getattribute__(prop)
             if type(val) is datetime.datetime:
                 val = val.strftime('%b %d, %Y %I:%M %p')
                 pass
+            elif type(val) is str:
+                val = val.replace('\n', '\\n') 
             vals[prop] = val
         return vals
 

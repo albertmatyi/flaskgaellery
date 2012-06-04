@@ -1,0 +1,31 @@
+<ul class="breadcrumb">
+{% set breadcrumb_base_url = 'admin_category' if not images else 'admin_images_in_category' %}
+{% for category in category_path %}
+	{% set is_active = category.key().id() == current_category.key().id() %}
+	<li {{ 'class="active"' if is_active }}>
+		{% if not is_active %}
+			<a href="{{ url_for(breadcrumb_base_url, parent_id=category.key().id()) }}">
+			{{ category.title }}
+			</a> <span class="divider">/</span>
+		{% else %}
+			{{ category.title }} 
+			<span class="divider">/</span>
+		{% endif %}
+	</li>
+{% endfor %}
+	<li>
+		<div class="btn-group">
+		    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		    Edit subcategory
+		    <span class="caret"></span>
+		    </a>
+		    <ul class="dropdown-menu">
+		    	{% for category in categories %}
+		    	<li>
+		    		<a href="{{ url_for(breadcrumb_base_url, parent_id=category.key().id()) }}">{{ category.title }}</a> 
+		    	</li>
+		    	{% endfor %}
+		    </ul>
+	    </div>
+	</li>
+</ul>

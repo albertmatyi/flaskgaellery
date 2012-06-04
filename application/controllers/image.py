@@ -14,8 +14,12 @@ from application.models import ImageModel, CategoryModel, ROOT_CAT_ID, v2m
 from google.appengine.api import blobstore, images, files
 from werkzeug.datastructures import FileStorage
 
-MAX_WIDTH=515
-MAX_HEIGHT=720
+
+'''
+    Maximum dimensions of the image
+'''
+MAX_WIDTH=720
+MAX_HEIGHT=515
 
 @admin_required
 def create_thumbnail(blob_key, width=MAX_WIDTH, height=MAX_HEIGHT):

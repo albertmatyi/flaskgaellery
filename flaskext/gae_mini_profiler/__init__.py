@@ -170,3 +170,7 @@ class GAEMiniProfiler(object):
         context = self._get_render_context()
         context['request_id'] = request_id
         return self._render("shared.html", context)
+
+''' Markdown __init__ '''
+
+__import__('pkg_resources').declare_namespace(__name__)

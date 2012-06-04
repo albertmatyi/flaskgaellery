@@ -5,10 +5,15 @@ Initialize Flask app
 
 from flask import Flask
 from random import random, Random
-from flask.helpers import jsonify
+from flask.helpers import jsonify, json
+from flaskext.markdown import Markdown
+import re
+from google.appengine.api import datastore_types
 
 app = Flask('application')
 app.config.from_object('application.settings')
+
+Markdown(app)
 
 import urls
 
@@ -25,7 +30,10 @@ def json_helper(array, name):
             firstEl = False
         ret = ret + str(el['id']) + ' : { \'key_id\':'+ str(el['id'])
         for prop, val in el.items():
-            ret = ret + ', \'' + str(prop) + '\'' + ': ' + '\'' + str(val).replace('\'', '\\\'') +'\''
+            if type(val) is str or type(val) is datastore_types.Text:
+                val = reduce(lambda s1, s2: s1+s2, re.split('\r+', str(val))) 
+            val = json.dumps(val)
+            ret = ret + ', \'' + str(prop) + '\'' + ': ' + val
             pass
         ret = ret + '}'
     return 'var ' + name + ' = {' + ret+'};'
@@ -33,5 +41,7 @@ def json_helper(array, name):
 
 
 app.jinja_env.globals.update(jsonify=json_helper)
+
+app.jinja_env.globals.update(len=len)
 
 app.jinja_env.globals.update(random_int=random_int)

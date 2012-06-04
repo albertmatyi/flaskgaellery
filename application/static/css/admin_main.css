@@ -1,0 +1,21 @@
+
+/* Main stylesheet */
+
+/* Your customizations here */
+
+.action-buttons > form, .action-buttons > button, .action-buttons div{
+	float: right;
+	margin-right: 1em;
+}
+
+td.action-buttons{
+	width: 260px;
+}
+
+.breadcrumb > li {
+	height: 20px;
+}
+
+.breadcrumb li li {
+	display: list-item;
+}

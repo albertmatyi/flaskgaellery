@@ -1,0 +1,108 @@
+{% extends "admin_base.html" %}
+
+{% block style_block %}
+    <style type="text/css">
+        table.table { width: 60%; }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h1 id="">Images</h1>
+    {% include "includes/category_breadcrumbs.html" %}
+    <div>&nbsp;</div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Category id</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for image in images %}
+            {% set image_id = image.key().id() %}
+            <tr>
+                <td>{{ image_id }}</td>
+                <td>
+                	{% if image.image_thumb_blob_key %}
+                		<img src="/blob/{{ image.image_thumb_blob_key }}" alt="{{ image.title }}"/>
+                	{% endif %}
+               	</td>
+                <td>{{ image.title }}</td>
+                <td>{{ image.description }}</td>
+                <td>{{ image.created.strftime('%b %d, %Y %I:%M %p') }}</td>
+                <td class="action-buttons">
+                    <form method="post" action="{{ url_for('delete_image', image_id=image_id) }}">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                    <div class="btn-group">
+	                   	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	                   		Move under
+ 							<span class="caret"></span>
+ 						</a>
+ 						<ul class="dropdown-menu">
+						{% for cat in all_categories %}
+ 							<li>
+ 								<a href="{{ url_for('move_image', image_id=image_id, parent_id=cat.key().id()) }}">{{ cat.title }}</a> 
+ 							</li>
+ 						{% endfor %}
+ 						</ul>
+					</div>
+					<button class="btn" onclick="initImageForm({{ image_id }}); return false;"  
+                    	data-toggle="modal" data-target="#new-image-modal">
+                    	Edit
+                   	</button>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">No images yet</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>
+        <a class="btn btn-primary" data-toggle="modal" data-target="#new-image-modal" onclick="initImageForm(false);">
+            <i class="icon-plus-sign icon-white"></i>
+            New image
+        </a>
+    </p>
+
+    {% include 'image/image_form.html' %} {# pull in new_image form (modal dialog) #}
+	
+{% endblock content %}
+
+{% block tail_script %}
+
+    <script type="text/javascript">
+    /* <![CDATA[ */
+    	
+    	// init js data
+    	{{ jsonify(images, 'images')|safe }}
+    	{{ jsonify( [reset_image], 'ri')|safe }}
+    	reset_image = ri[0];
+    	
+    	function initImageForm(image_id){
+    		if(image_id){
+	    		initForm(window.images[image_id], 'image');
+	    		$('#update-image-control').show();
+	    		$('#update_image-image').prop('checked', false);
+	    		$('#image-image').prop('disabled', true);
+    		} else {
+    			initForm(reset_image, 'image'); 
+	    		$('#update-image-control').hide();
+	    		$('#image-image').prop('disabled', false);
+	    		$('#update_image-image').prop('checked', true);
+   			}
+    	}
+    	
+        $(document).ready(function() {
+            // Enable modal dialog (via Bootstrap's 'modal' plugin)
+            $('#new-image-modal').modal({'show': false});
+        });
+		
+    /* ]]> */
+    </script>
+{% endblock %}

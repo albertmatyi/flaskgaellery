@@ -28,7 +28,10 @@ def v2m(form, mdl_obj):
 
 class AbstractModel(db.Model):
     def jsond(self):
-        ''' will return a dictionary, prepared for json representation of the object'''
+        ''' 
+        will return a dictionary, prepared for json representation
+         of the object
+         '''
         
         #FIXME method doesn't do what it's supposed to
         vals = {'id': self.key().id()} if self.is_saved() else { 'id': '0' } 
@@ -58,13 +61,15 @@ class CategoryDummy(object):
 '''
 ROOT_CAT_ID = -1
 '''
-    A dummy category object containing the ROOT_CAT_ID (@key().id()) and a title <Root>
+    A dummy category object containing the ROOT_CAT_ID (@key().id()) and 
+    a title <Root>
 '''
 ROOT_CAT_DUMMY = CategoryDummy()
 
 class CircularCategoryException(Exception):
     def __init__(self):
-        self.message = "The category cannot be the subcategory of itself or of one of its subcategories"
+        self.message = "The category cannot be the subcategory of itself or \
+                        of one of its subcategories"
         pass
     pass
 
@@ -95,7 +100,8 @@ class CategoryModel(AbstractModel):
         '''
             @return: All subcategories of the current CategoryModel 
         '''
-        cats = [cat for cat in CategoryModel.all().filter('parent_id', self.key().id())]
+        cats = [cat for cat in CategoryModel.all().filter('parent_id', 
+                                                          self.key().id())]
         return cats
         pass
     
@@ -108,6 +114,10 @@ class CategoryModel(AbstractModel):
         pass
     
     def validate(self):
+        '''
+            @return: True if all is right, otherwise throws exception
+            
+        '''
         if self.is_saved() and self.key().id() in self.get_path_ids_to_root():
             raise CircularCategoryException()
         return True
@@ -115,14 +125,16 @@ class CategoryModel(AbstractModel):
     
     def put(self):
         '''
-            Overrides the saving to provide an extra validation
+            Overrides the saving to provide an extra validation.
+            @return: super.put or throws validation exception
         '''
         if self.validate():
-            super(CategoryModel, self).put()
+            return super(CategoryModel, self).put()
     
     def get_path_to_root(self):
         '''
-            @return: All of the CategoryModel objects starting with its parent until the root. (it does not contain self)  
+            @return: All of the CategoryModel objects starting with its parent
+            until the root. (it does not contain self)  
         '''
         if self.parent_id == -1:
             return []
@@ -180,18 +192,11 @@ class ImageModel(AbstractModel):
         pass
 
     
-def initDB():
-    CategoryModel(title='Home', parent_id= -1).put()
-    key = CategoryModel(title='Portraits', parent_id= -1).put()
-    CategoryModel(title='Men', parent_id=key.id()).put()
-    CategoryModel(title='Women', parent_id=key.id()).put()
-    key = CategoryModel(title='Cities', parent_id= -1).put()
-    CategoryModel(title='London', parent_id=key.id()).put()
-    CategoryModel(title='Antwerp', parent_id=key.id()).put()
-    key = CategoryModel(title='Cities', parent_id= -1).put()
-    CategoryModel(title='London', parent_id=key.id()).put()
-    CategoryModel(title='Antwerp', parent_id=key.id()).put()
-    CategoryModel(title='About', parent_id= -1).put()
-    CategoryModel(title='Contact', parent_id= -1).put()
+def init_db():
+    titles = ['Portraits','Events', 'Modeling Portfolios', 'Weddings', 
+              'Corporate Shots', 'Stock Photos', 'Family Photos',
+              'Head-shots', 'Black&White Photos', 'Unique Photos']
+    for title in titles:
+        CategoryModel(visible=True, title=title, parent_id= -1).put()
     pass
     

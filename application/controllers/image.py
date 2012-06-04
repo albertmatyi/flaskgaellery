@@ -13,13 +13,14 @@ from application.forms import ImageForm
 from application.models import ImageModel, CategoryModel, ROOT_CAT_ID, v2m
 from google.appengine.api import blobstore, images, files
 from werkzeug.datastructures import FileStorage
+from random import Random
 
 
 '''
     Maximum dimensions of the image
 '''
-MAX_WIDTH=720
-MAX_HEIGHT=515
+MAX_WIDTH = 720
+MAX_HEIGHT = 515
 
 @admin_required
 def create_thumbnail(blob_key, width=MAX_WIDTH, height=MAX_HEIGHT):
@@ -113,7 +114,7 @@ def delete_image(image_id):
         flash(u'App Engine Datastore is currently in read-only mode.', 'info')
     return redirect(url_for('admin_images_in_category', parent_id=parent_id))
 
-
+@admin_required
 def move_image(image_id, parent_id=ROOT_CAT_ID):
     cat = ImageModel.get_by_id(image_id)
     cat.category_id = parent_id
@@ -121,4 +122,53 @@ def move_image(image_id, parent_id=ROOT_CAT_ID):
     return redirect(url_for('admin_images_in_category', parent_id=parent_id), 302)
     pass
 
+def get_images_for_category(category_id):
+    ''' 
+        Retrieves images for a given category
+    '''
+    # FIXME lorempixum
+    n = Random().randint(8, 20);
+    contents = []
+    for i in range(0, n):
+        c = ImageModel()
+        c.title = get_random_text(Random().randint(5, 25)).replace('\n', '').replace('\r', '')
+        c.description = get_random_text(Random().randint(45, 325))
+        c.height = MAX_HEIGHT
+        c.width = Random().randint(300, MAX_WIDTH)
+        c.image_blob_key = 'pixum'
+        c = c.jsond()
+        c['id'] = i
+        contents += [c]
+        pass
+#    contents = [c.jsond() for c in ImageModel.all().filter('category_id', category_id).filter('visible', True)]
+    return contents 
+    pass
 
+def get_random_text(length):
+    if length > len(fixieText):
+        return fixieText
+    start = Random().randint(0, len(fixieText) - length)
+    return fixieText[start : start + length].capitalize()
+    pass
+
+fixieText = '''Rado 1982 is classy gluten-free ethical esse authentic nulla. Bennie dumpster art reprehenderit DSLR whatever esse. Kale fresh trust-fund vegan beer wes reprehenderit delectus. Kale mollit magna polaroid.
+
+    Instagram anime party ethical
+    Bushwick salvia fresh 1982 moon
+    Beer yr etsy vegan
+    Voluptate wayfarers 8-bit
+    Sriracha delectus magna party
+    Frado gastropub fin daisy is
+    DSLR non beer
+
+Latte wayfarers kale beer viral selvage. Twee 8-bit pony is liberal original capitalism. Anim liberal reprehenderit classy sunt. Sint viral bennie Anderson bushwick frado.
+Is Instagram anime
+
+Brony street-art esse seitan etsy. Delectus salvia delectus bronson placeat liberal narwhal. Mollit vinyl incididunt dreamcatcher DSLR authentic 8-bit. Frado daisy pour-over vinyl clothesline ethical.
+
+Hog vegan gluten-free authentic DSLR. Pinterest 8-bit placeat seitan latte fin kale kale. Frado chillwave gastropub authentic non dumpster authentic bushwick. Art narwhal whatever iphone placeat esse letterpress ut liberal. Art mollit sint non fixie authentic classy salvia.
+
+Bronson I delectus tassel. Of voluptate vegan mollit. Of fin letterpress art ut Anderson of tassel non-ethical. Party viral fixie chowder fresh.
+
+Non-ethical shot anime sriracha trust-fund iphone brooklyn original fresh. 8-bit magna art etsy gluten-free incididunt party. Helvetica salvia party art vintage fin. Brony gluten-free authentic hog street-art twee viral. Narwhal gluten-free shot art bennie yr hog placeat.
+'''

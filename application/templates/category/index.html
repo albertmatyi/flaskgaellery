@@ -12,7 +12,10 @@
 			{% if content.image_blob_key %}
 				<div class="post image-post well" id="post{{ i }}">
 					<div class="img-data">
+					<!-- FIXME lorempixum				
 						<img src="/blob/{{ content.image_blob_key }}" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
+						-->
+						<img src="http://lorempixum.com/{{ content.width }}/{{ content.height }}/abstract" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
 					</div>
 					<div class="img-info-container">
 						{% if content.title %}
@@ -36,6 +39,7 @@
 		{% endfor %}
 	</div>
 </div>
+{% if len(contents) > 1 %}
 <div class="pagination">
 	<ul>
 		<li><a href="#" onclick="return gotoPrevPost();">Prev</a></li>
@@ -45,6 +49,7 @@
     	<li><a href="#" onclick="return gotoNextPost();">Next</a></li>
 	</ul>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block tail_script %}

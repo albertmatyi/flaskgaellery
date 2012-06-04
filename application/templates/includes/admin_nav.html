@@ -1,9 +1,9 @@
 <ul class="nav nav-tabs">
 	
-    <li  {% if not images %} class="active" {% endif %} >
+    <li  {% if not reset_image %} class="active" {% endif %} >
         <a href="{{ url_for('admin_category', parent_id=current_category.key().id()) }}">Categories</a>
     </li>
-    <li {% if images %} class="active" {% endif %}>
+    <li {% if reset_image %} class="active" {% endif %}>
         <a href="{{ url_for('admin_images_in_category', parent_id=current_category.key().id()) }}">Images</a>
     </li>
 </ul>

@@ -12,6 +12,8 @@ from flask import render_template, flash, url_for, redirect
 from flask.globals import request
 from flask.helpers import jsonify
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
+from application.controllers import image
+from application.controllers.image import get_images_for_category
 
 #from models import CategoryModel
 
@@ -69,8 +71,8 @@ def delete_category(category_id):
     
 @admin_required
 @app.route('/admin/initdb')
-def initDB():
-    models.initDB()
+def init_db():
+    models.init_db()
     return redirect(url_for('home'))
     pass
 
@@ -93,7 +95,7 @@ def init_sub_tree_along_path(category, path, visible_only=True):
 def category(parent_id=ROOT_CAT_ID):
     ''' This will render the main page with the selected category defined by parent_id, and with the
     content that it contains  '''
-    contents = [c.jsond() for c in ImageModel.all().filter('category_id', parent_id).filter('visible', True)]
+    contents = get_images_for_category(parent_id)
     if request.is_xhr:
         categories = [c.jsond() for c in CategoryModel.all().filter('parent_id', parent_id).filter('visible', True)]
         categories = sorted(categories, key=lambda c: c.order)

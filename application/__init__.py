@@ -18,7 +18,7 @@ app.config.from_object('application.settings')
     Add markdown support
 '''
 #sys.path.append(os.path.join(os.path.dirname(file), 'lib'))
-from flaskext.fmarkdown import Markdown
+from flaskext.markdown import Markdown
 Markdown(app)
 
 import urls

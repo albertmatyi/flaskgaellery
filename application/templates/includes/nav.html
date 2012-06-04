@@ -1,10 +1,10 @@
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-pills nav-stacked category-nav">
 	<li class="nav-header">
 		<a href="{{url_for('home')}}"> Anabella Veress <small> Photography </small></a>
 		<small>Photographer in New York</small>
 	</li>
 	{% for category in categories recursive %}
-		<li> 
+		<li class="category-nav-element {{ 'active' if current_category.key and current_category.key().id() == category.key().id() else '' }}" > 
 			<a href="{{ url_for('category', parent_id=category.key().id()) }}" >
 				{{ category.title }}
 			</a>

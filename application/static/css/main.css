@@ -1,39 +1,66 @@
 /* Main stylesheet */
 
 /* Your customizations here */
+body, document, .vcenterer {
+	background: #F3F3F3;
+	height: 100%;
+	width: 100%;
+}
+
+.vcenterer {
+	top: 50%;
+	position: absolute;
+}
+
 .container-fluid,#body_content,#navigation {
 	height: 570px;
+	position: relative;
+	top: -25%;
 }
 
-.nav-header a,.nav-header small {
+/* Navigation on the left*/
+.category-nav {
+	text-align: right;
+}
+
+.category-nav .nav-header {
+	text-align: center;
+	font-size: 1.3em;
+	padding: 8px 0;
+}
+
+.category-nav .nav-header a {
 	font-variant: normal;
 	text-transform: lowercase;
+	font-weight: normal;
 }
 
-.nav-header a {
-	font-size: 1.2em;
-}
-
-.nav-header small {
-	font-size: .8em;
+.category-nav .nav-header small {
+	font-variant: normal;
+	font-size: .6em;
 	text-transform: uppercase;
+	font-weight: normal;
+}
+
+.category-nav .nav-header > small{
+	font-size: .5em;
+}
+
+.category-nav-element a {
+	text-transform: uppercase;
+	font-size: .9em;
 }
 
 .nav ul.nav {
 	padding-left: 1em;
 }
 
+/* Content*/
 .post-container {
 	overflow-x: hidden;
 	overflow-y: hidden;
 	/*  + 40px for well padding & +20px for scrollbar*/
 	height: 575px;
-}
-
-#loader {
-	width: 300px;
-	margin: 0 auto;
-	margin-top: 230px;
 }
 
 .posts {
@@ -50,15 +77,9 @@
 	max-width: 740px;
 	margin-left: 10px;
 	margin-bottom: 0;
+	background: #FFF;
 }
 
-.pagination {
-	margin-left: auto;
-	margin-right: auto;
-	float: left;
-	position: relative;
-	top: 5000px;
-}
 
 .img-data,.img-info-container {
 	height: 100%;
@@ -69,24 +90,25 @@
 }
 
 .img-info-container {
-	position:relative;
-    top: -515px;
+	position: relative;
+	top: -515px;
 }
 
 .img-info {
-	background-color: rgba(255, 255, 255, .4);
+	background-color: rgba(255, 255, 255, .85);
 	position: relative;
 	left: 100%;
 	padding: 15px;
 	max-height: 485px;
 }
 
-.img-info.active{
+.img-info.active {
 	left: 0;
 }
 
-.img-info>article,.img-info>aside,.img-info>details,.img-info>figcaption,.img-info>figure,.img-info>footer,.img-info>header,.img-info>hgroup,.img-info>nav,.img-info>section{
-	width: 100%;	
+.img-info>article,.img-info>aside,.img-info>details,.img-info>figcaption,.img-info>figure,.img-info>footer,.img-info>header,.img-info>hgroup,.img-info>nav,.img-info>section
+	{
+	width: 100%;
 }
 
 ul.img-controls,ul.img-controls li {
@@ -109,4 +131,39 @@ ul.img-controls li {
 
 .img-info h2,.img-info p {
 	width: 100%;
+}
+
+/* Loader */
+
+#loader {
+	width: 300px;
+	margin: 0 auto;
+	margin-top: 230px;
+}
+
+/* Pagination */
+
+.post-pagination {
+	margin: 0;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 5000px;
+	width: 400px;
+}
+
+.pagination ul{
+	box-shadow: none;
+}
+
+.pagination .number-container{
+	width: 300px;
+	margin-left: 2px;
+	display: inline-block;
+	overflow-x: hidden;
+}
+
+.pagination .number-container > ul{
+	width: 1000px;
+	position: relative;
 }

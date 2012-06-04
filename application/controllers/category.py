@@ -114,7 +114,8 @@ def category(parent_id=ROOT_CAT_ID):
         pass
         categories = sorted(categories, key=lambda c: c.order)
         contents = sorted(contents, key=lambda c: c['order'])
-        return render_template('category/index.html', categories=categories, contents=contents)
+        return render_template('category/index.html', categories=categories, contents=contents,
+                               current_category=category)
     pass
 
 def home():

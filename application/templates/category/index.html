@@ -15,7 +15,7 @@
 					<!-- FIXME lorempixum				
 						<img src="/blob/{{ content.image_blob_key }}" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
 						-->
-						<img src="http://lorempixum.com/{{ content.width }}/{{ content.height }}/abstract" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
+						<img src="http://lorempixum.com/{{ content.width }}/{{ content.height }}" style="width: {{ content.width }}px; height: {{ content.height }}px;"/>
 					</div>
 					<div class="img-info-container">
 						{% if content.title %}
@@ -40,13 +40,19 @@
 	</div>
 </div>
 {% if len(contents) > 1 %}
-<div class="pagination">
+<div class="post-pagination pagination">
 	<ul>
-		<li><a href="#" onclick="return gotoPrevPost();">Prev</a></li>
+		<li><a href="#" onclick="return gotoPrevPost();"><i class="icon-chevron-left" ></i></a></li>
+		<li>
+			<div class="number-container">
+			<ul>
 			{% for i in range(0, len(contents)) %}
-		<li><a href="#post{{i}}" onclick="return gotoPost({{ i }});">{{ i }}</a></li>
+				<li><a href="#post{{i}}" onclick="return gotoPost({{ i }});">{{ i }}</a></li>
 			{% endfor %}		
-    	<li><a href="#" onclick="return gotoNextPost();">Next</a></li>
+			</ul>
+			</div>
+		</li>
+		<li><a href="#" onclick="return gotoNextPost();"><i class="icon-chevron-right" ></i></a></li>
 	</ul>
 </div>
 {% endif %}

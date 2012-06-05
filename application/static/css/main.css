@@ -1,7 +1,7 @@
 /* Main stylesheet */
 
 /* Your customizations here */
-body, document, .vcenterer {
+body,document,.vcenterer {
 	background: #F3F3F3;
 	height: 100%;
 	width: 100%;
@@ -42,7 +42,7 @@ body, document, .vcenterer {
 	font-weight: normal;
 }
 
-.category-nav .nav-header > small{
+.category-nav .nav-header>small {
 	font-size: .5em;
 }
 
@@ -79,7 +79,6 @@ body, document, .vcenterer {
 	margin-bottom: 0;
 	background: #FFF;
 }
-
 
 .img-data,.img-info-container {
 	height: 100%;
@@ -134,7 +133,6 @@ ul.img-controls li {
 }
 
 /* Loader */
-
 #loader {
 	width: 300px;
 	margin: 0 auto;
@@ -142,7 +140,6 @@ ul.img-controls li {
 }
 
 /* Pagination */
-
 .post-pagination {
 	margin: 0;
 	margin-left: auto;
@@ -152,18 +149,22 @@ ul.img-controls li {
 	width: 400px;
 }
 
-.pagination ul{
+.post-pagination ul {
+	width: 400px;
+}
+
+.pagination ul {
 	box-shadow: none;
 }
 
-.pagination .number-container{
+.pagination .number-container {
 	width: 300px;
 	margin-left: 2px;
 	display: inline-block;
 	overflow-x: hidden;
 }
 
-.pagination .number-container > ul{
+.pagination .number-container>ul {
 	width: 1000px;
 	position: relative;
 }

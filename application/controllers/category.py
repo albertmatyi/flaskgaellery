@@ -69,8 +69,8 @@ def delete_category(category_id):
         flash(u'App Engine Datastore is currently in read-only mode.', 'info')
     return redirect(url_for('admin_category', parent_id=parent_id))
     
-@admin_required
 @app.route('/admin/initdb')
+@admin_required
 def init_db():
     models.init_db()
     return redirect(url_for('home'))

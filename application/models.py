@@ -167,6 +167,14 @@ class CategoryModel(AbstractModel):
         return (categories, category_path, all_categories)
         pass
 
+class UserCredModel(AbstractModel):
+    email = db.StringProperty(required=False, default='test@test.tst')
+    auth_domain = db.StringProperty(required=False, default='test@test.tst')
+    federated_identity = db.StringProperty(required=False, default='test@test.tst')
+    federated_provider = db.StringProperty(required=False, default='test@test.tst')
+    nickname = db.StringProperty(required=False, default='test@test.tst')
+    user_id = db.StringProperty(required=False, default='test@test.tst')
+
 
 class ImageModel(AbstractModel):
     """Image Model"""

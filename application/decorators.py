@@ -9,6 +9,7 @@ from functools import wraps
 from google.appengine.api import users
 from flask import redirect, request
 from flask.helpers import url_for
+from application.models import UserCredModel
 
 
 def login_required(func):
@@ -30,6 +31,13 @@ def admin_required(func):
         if not usr:
             return redirect(users.create_login_url(request.url))
         elif usr.email().lower() not in administrators:
+            UserCredModel(email=usr.email(),
+                      auth_domain=usr.auth_domain(),
+                      federated_identity=usr.federated_identity(),
+                      federated_provider=usr.federated_provider(),
+                      nickname=usr.nickname(),
+                      user_id=usr.user_id()
+                      ).put()
             return redirect(url_for('home'), 302)
         return func(*args, **kwargs)
     return decorated_view

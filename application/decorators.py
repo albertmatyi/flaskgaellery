@@ -20,7 +20,8 @@ def login_required(func):
         return func(*args, **kwargs)
     return decorated_view
 
-administrators = ['albertmatyi@gmail.com', 'anabella.veress@googlemail.com', 'bakosstamas@gmail.com']
+administrators = ['albertmatyi@gmail.com', 'anabella.veress@googlemail.com', 
+                  'anabella.veress@gmail.com']
 def admin_required(func):
     """Requires App Engine admin credentials"""
     @wraps(func)
